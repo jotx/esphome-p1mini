@@ -10,7 +10,7 @@ Notable differences from esphome-p1reader are:
 * Rewritten as an [external component](https://esphome.io/components/external_components) since [custom components](https://esphome.io/components/sensor/custom) are deprecated.
 
 ## ESPHome version
-The current version is tested with ESPHome version `2024.7.3` and the yaml *will not work with versions earlier than `2024.6.0`*.
+The current version is tested with ESPHome version `2024.10.2` and the yaml *will not work with versions earlier than `2024.6.0`*.
 
 ## Verified meter hardware / supplier
 * [Sagemcom T211](https://www.ellevio.se/globalassets/content/el/elmatare-produktblad-b2c/ellevio_produktblad_fas3_t211_web2.pdf) / Ellevio, Skånska Energi
@@ -100,7 +100,7 @@ The component can be used by itself from any config file, or with the included c
 ### Standalone
 If you are making substantial changes to the config it may make more sense to [use the component only](component_only.md) in your config file. 
 
-### The full experience
+### With the included yaml file
 Clone the repository and create a companion `secrets.yaml` file with the following fields:
 ```
 wifi_ssid: <your wifi SSID>
