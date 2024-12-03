@@ -14,7 +14,7 @@ The following meters have been known to have issues with RTS.
 #### S34U18 (Sanxing SX631)
 The S34U18 seems buggy and may stop working intermittently when using the RTS signal. If you are having issues, try keeping RTS high all the time in the config.
 
-### KAIFA MA304T4E / MA304H4E
+#### KAIFA MA304T4E / MA304H4E
 May not work at all wihtout setting RTS constantly high.
 
 #### Landis+Gyr E360
