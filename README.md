@@ -18,10 +18,10 @@ The current version is tested with ESPHome version `2024.10.2` and the yaml *wil
 * [Landis+Gyr E360](https://eu.landisgyr.com/blog-se/e360-en-smart-matare-som-optimerarden-totala-agandekostnaden) / E.ON - [But read this](NO-RTS.md#landisgyr-e360)
 * [S34U18 (Sanxing SX631)](https://www.vattenfalleldistribution.se/matarbyte/nya-elmataren/) / Vattenfall - [But read this](NO-RTS.md#s34u18-sanxing-sx631)
 * Kamstrup OMNIPOWER
+* [KAIFA MA304H4E](https://reko.nackaenergi.se/elmatarbyte/) (and MA304T4E) / Nacka Energi - [But read this](NO-RTS.md#kaifa-ma304t4e--ma304h4e)
 
 ## Meters verified with esphome-p1reader, which should work too...
 * [Itron A300](https://boraselnat.se/elnat/elmatarbyte-2020-2021/sa-har-fungerar-din-nya-elmatare/) / Borås Elnät
-* [KAIFA MA304H4E](https://reko.nackaenergi.se/elmatarbyte/) / Nacka Energi
 * [KAIFA CL109](https://www.oresundskraft.se/dags-for-matarbyte/) / Öresundskraft
 
 ## Meters with issues
