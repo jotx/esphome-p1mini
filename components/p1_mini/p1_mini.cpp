@@ -50,7 +50,7 @@ namespace esphome {
                 while (std::isdigit(*C)) major = major * 10 + (*C++ - '0');
                 if (*C++ == '\0') return OBIS_ERROR;
                 while (std::isdigit(*C)) minor = minor * 10 + (*C++ - '0');
-                if (*C++ == '\0') return OBIS(major, minor, micro);
+                if (*C++ == '\0') return OBIS_ERROR;
                 while (std::isdigit(*C)) micro = micro * 10 + (*C++ - '0');
                 if (*C++ != '\0') return OBIS_ERROR;
                 return OBIS(major, minor, micro);
@@ -136,7 +136,7 @@ namespace esphome {
                         m_data_format = data_formats::BINARY;
                     }
                     else {
-                        ESP_LOGW(TAG, "Unknown data format (0x%02X). Resetting.", read_byte);
+                        ESP_LOGW(TAG, "Unknown data format (0x%02x). Resetting.", read_byte);
                         ChangeState(states::ERROR_RECOVERY);
                         return;
                     }
@@ -379,8 +379,12 @@ namespace esphome {
                         m_message_buffer_position
                     );
                 }
-                if (m_min_period_ms < loop_start_time - m_identifying_message_time) {
+                if (m_min_period_ms == 0 || m_min_period_ms < loop_start_time - m_identifying_message_time) {
                     ChangeState(states::IDENTIFYING_MESSAGE);
+                }
+                else if (available()) {
+                    ESP_LOGE(TAG, "Data was received before beeing requested. If flow control via the RTS signal is not used, the minimum_period should be set to 0s in the yaml. Resetting.");
+                    ChangeState(states::ERROR_RECOVERY);
                 }
                 break;
             case states::ERROR_RECOVERY:
@@ -394,10 +398,6 @@ namespace esphome {
                 }
                 break;
             }
-
-
-
-
         }
 
         void P1Mini::ChangeState(enum states new_state)
@@ -445,8 +445,8 @@ namespace esphome {
         void P1Mini::FlushDiscardLog()
         {
             if (m_discard_log_position != m_discard_log_buffer) {
-                ESP_LOGW(TAG, "Discarding: %s", m_discard_log_buffer);
                 *m_discard_log_position = '\0';
+                ESP_LOGW(TAG, "Discarding: %s", m_discard_log_buffer);
                 m_discard_log_position = m_discard_log_buffer;
             }
         }
