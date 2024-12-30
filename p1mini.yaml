@@ -101,6 +101,13 @@ p1_mini:
 #    uart_id: my_uart_2
 #    ...
 
+text_sensor:
+  - platform: p1_mini
+    name: "Meter ID"
+    p1_mini_id: p1_mini_1
+    identifier: "/"
+    filters:
+      - substitute: "/ -> "
 sensor:
 - platform: wifi_signal
   name: "${device_name} WiFi Signal"

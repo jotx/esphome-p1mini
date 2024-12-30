@@ -26,6 +26,22 @@ namespace esphome {
             virtual uint32_t Obis() const { return m_obis; }
         };
 
+        class IP1MiniTextSensor
+        {
+        public:
+            virtual ~IP1MiniTextSensor() = default;
+            virtual void publish_val(std::string) = 0;
+            virtual std::string Identifier() const = 0;
+        };
+
+        class P1MiniTextSensorBase : public IP1MiniTextSensor
+        {
+            std::string const m_identifier;
+        public:
+            P1MiniTextSensorBase(std::string identifier);
+            virtual std::string Identifier() const { return m_identifier; }
+        };
+
         class ReadyToReceiveTrigger : public Trigger<> { };
         class UpdateReceivedTrigger : public Trigger<> { };
         class CommunicationErrorTrigger : public Trigger<> { };
@@ -42,6 +58,11 @@ namespace esphome {
             void register_sensor(IP1MiniSensor *sensor)
             {
                 m_sensors.emplace(sensor->Obis(), sensor);
+            }
+
+            void register_text_sensor(IP1MiniTextSensor *sensor)
+            {
+                m_text_sensors.emplace(sensor->Identifier(), sensor);
             }
 
             void register_ready_to_receive_trigger(ReadyToReceiveTrigger *trigger) { m_ready_to_receive_triggers.push_back(trigger); }
@@ -102,6 +123,7 @@ namespace esphome {
             bool const m_secondary_p1;
 
             std::map<uint32_t, IP1MiniSensor *> m_sensors;
+            std::map<std::string, IP1MiniTextSensor *> m_text_sensors;
             std::vector<ReadyToReceiveTrigger *> m_ready_to_receive_triggers;
             std::vector<UpdateReceivedTrigger *> m_update_received_triggers;
             std::vector<CommunicationErrorTrigger *> m_communication_error_triggers;

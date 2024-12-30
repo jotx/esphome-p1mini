@@ -91,6 +91,12 @@ namespace esphome {
             if (m_obis == OBIS_ERROR) ESP_LOGE(TAG, "Not a valid OBIS code: '%s'", obis_code.c_str());
         }
 
+        P1MiniTextSensorBase::P1MiniTextSensorBase(std::string identifier)
+            : m_identifier{ identifier }
+        {
+            //ESP_LOGI(TAG, "New text sensor: '%s'", identifier.c_str());
+        }
+
         P1Mini::P1Mini(uint32_t min_period_ms, int buffer_size, bool secondary_p1)
             : m_error_recovery_time{ millis() }
             , m_message_buffer_size{ buffer_size }
@@ -263,7 +269,15 @@ namespace esphome {
                         int minor{ -1 }, major{ -1 }, micro{ -1 };
                         double value{ -1.0 };
                         if (sscanf(m_start_of_data, "1-0:%d.%d.%d(%lf", &major, &minor, &micro, &value) != 4) {
-                            ESP_LOGD(TAG, "Could not parse value from line '%s'", m_start_of_data);
+                            bool matched_text_sensor{ false };
+                            for (auto const &text_sensor : m_text_sensors) {
+                                if (strncmp(m_start_of_data, text_sensor.first.c_str(), text_sensor.first.size()) == 0) {
+                                    matched_text_sensor = true;
+                                    text_sensor.second->publish_val(m_start_of_data);
+                                }
+                                
+                            }
+                            if (!matched_text_sensor) ESP_LOGD(TAG, "No sensor matched line '%s'", m_start_of_data);
                         }
                         else {
                             uint32_t const obisCode{ OBIS(major, minor, micro) };
@@ -378,6 +392,9 @@ namespace esphome {
                         m_waiting_time - m_identifying_message_time,
                         m_message_buffer_position
                     );
+                    
+                    //ESP_LOGI(TAG, "%d text sensors", m_text_sensors.size());
+                    //for (auto const &S : m_text_sensors) ESP_LOGI(TAG, "  '%s'", S.second->Identifier().c_str());
                 }
                 if (m_min_period_ms == 0 || m_min_period_ms < loop_start_time - m_identifying_message_time) {
                     ChangeState(states::IDENTIFYING_MESSAGE);

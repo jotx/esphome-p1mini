@@ -11,6 +11,7 @@ MULTI_CONF = True
 
 CONF_P1_MINI_ID = "p1_mini_id"
 CONF_OBIS_CODE = "obis_code"
+CONF_IDENTIFIER = "identifier"
 CONF_MINIMUM_PERIOD = "minimum_period"
 CONF_BUFFER_SIZE = "buffer_size"
 CONF_SECONDARY_P1 = "secondary_p1"
@@ -29,7 +30,7 @@ CONFIG_SCHEMA = cv.Schema({
     cv.GenerateID(): cv.declare_id(P1Mini),
     cv.Optional(CONF_SECONDARY_P1, False): cv.boolean,
     cv.Optional(CONF_MINIMUM_PERIOD, default="0s"): cv.time_period,
-    cv.Optional(CONF_BUFFER_SIZE, default=3072): cv.int_range(min=1024, max=32768),
+    cv.Optional(CONF_BUFFER_SIZE, default=3072): cv.int_range(min=512, max=32768),
     cv.Optional(CONF_ON_READY_TO_RECEIVE): automation.validate_automation(
         {
             cv.GenerateID(CONF_TRIGGER_ID): cv.declare_id(ReadyToReceiveTrigger),
@@ -77,4 +78,8 @@ def obis_code(value):
     #match = re.match(r"^\d{1,3}-\d{1,3}:\d{1,3}\.\d{1,3}\.\d{1,3}$", value)
     # if match is None:
     #    raise cv.Invalid(f"{value} is not a valid OBIS code")
+    return value
+
+def identifier(value):
+    value = cv.string(value)
     return value
