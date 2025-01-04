@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------
 // ESPHome P1 Electricity Meter custom sensor
-// Copyright 2024 Johnny Johansson
+// Copyright 2025 Johnny Johansson
 // Copyright 2022 Erik Björk
 // Copyright 2020 Pär Svanström
 // 
@@ -9,7 +9,8 @@
 //  0.2.0 2022-04-13:   Major rewrite
 //  0.3.0 2022-04-23:   Passthrough to secondary P1 device
 //  0.4.0 2022-09-20:   Support binary format
-//  0.4.0 2022-09-20:   Rewritten as an ESPHome "external component"
+//  0.5.0 ????-??-??:   Rewritten as an ESPHome "external component"
+//  0.6.0 2025-01-04:   Introduced text sensors
 //
 // MIT License
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
@@ -271,9 +272,10 @@ namespace esphome {
                         if (sscanf(m_start_of_data, "1-0:%d.%d.%d(%lf", &major, &minor, &micro, &value) != 4) {
                             bool matched_text_sensor{ false };
                             for (auto const &text_sensor : m_text_sensors) {
-                                if (strncmp(m_start_of_data, text_sensor.first.c_str(), text_sensor.first.size()) == 0) {
+                                if (strncmp(m_start_of_data, text_sensor->Identifier().c_str(), text_sensor->Identifier().size()) == 0) {
                                     matched_text_sensor = true;
-                                    text_sensor.second->publish_val(m_start_of_data);
+                                    text_sensor->publish_val(m_start_of_data);
+                                    break;
                                 }
                                 
                             }
@@ -392,9 +394,6 @@ namespace esphome {
                         m_waiting_time - m_identifying_message_time,
                         m_message_buffer_position
                     );
-                    
-                    //ESP_LOGI(TAG, "%d text sensors", m_text_sensors.size());
-                    //for (auto const &S : m_text_sensors) ESP_LOGI(TAG, "  '%s'", S.second->Identifier().c_str());
                 }
                 if (m_min_period_ms == 0 || m_min_period_ms < loop_start_time - m_identifying_message_time) {
                     ChangeState(states::IDENTIFYING_MESSAGE);

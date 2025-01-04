@@ -62,7 +62,10 @@ namespace esphome {
 
             void register_text_sensor(IP1MiniTextSensor *sensor)
             {
-                m_text_sensors.emplace(sensor->Identifier(), sensor);
+                // Sort long identifiers first in the vector
+                auto iter{ m_text_sensors.begin() };
+                while (iter != m_text_sensors.end() && sensor->Identifier().size() < (*iter)->Identifier().size()) ++iter;
+                m_text_sensors.insert(iter, sensor);
             }
 
             void register_ready_to_receive_trigger(ReadyToReceiveTrigger *trigger) { m_ready_to_receive_triggers.push_back(trigger); }
@@ -123,7 +126,7 @@ namespace esphome {
             bool const m_secondary_p1;
 
             std::map<uint32_t, IP1MiniSensor *> m_sensors;
-            std::map<std::string, IP1MiniTextSensor *> m_text_sensors;
+            std::vector<IP1MiniTextSensor *> m_text_sensors; // Keep sorted so longer identifiers are first!
             std::vector<ReadyToReceiveTrigger *> m_ready_to_receive_triggers;
             std::vector<UpdateReceivedTrigger *> m_update_received_triggers;
             std::vector<CommunicationErrorTrigger *> m_communication_error_triggers;

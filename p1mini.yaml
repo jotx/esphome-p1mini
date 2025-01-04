@@ -104,180 +104,215 @@ p1_mini:
 text_sensor:
   - platform: p1_mini
     name: "Meter ID"
+    icon: "mdi:identifier"
     p1_mini_id: p1_mini_1
     identifier: "/"
     filters:
       - substitute: "/ -> "
+#  - platform: p1_mini
+#    name: "Date+Time"
+#    icon: "mdi:calendar-range"
+#    p1_mini_id: p1_mini_1
+#    identifier: "0-0:1.0.0("
+#    filters:
+#      - substitute: "0-0:1.0.0( -> "
+#      - substitute: ") -> "
 sensor:
-- platform: wifi_signal
-  name: "${device_name} WiFi Signal"
-  update_interval: 10s
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "1.8.0"
-  name: "Cumulative Active Import"
-  unit_of_measurement: kWh
-  accuracy_decimals: 3
-  state_class: "total_increasing"
-  device_class: "energy"
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "2.8.0"
-  name: "Cumulative Active Export"
-  unit_of_measurement: kWh
-  accuracy_decimals: 3
-  state_class: "total_increasing"
-  device_class: "energy"
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "3.8.0"
-  name: "Cumulative Reactive Import"
-  unit_of_measurement: kvarh
-  accuracy_decimals: 3
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "4.8.0"
-  name: "Cumulative Reactive Export"
-  unit_of_measurement: kvarh
-  accuracy_decimals: 3
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "1.7.0"
-  name: "Momentary Active Import"
-  unit_of_measurement: kW
-  accuracy_decimals: 3
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "2.7.0"
-  name: "Momentary Active Export"
-  unit_of_measurement: kW
-  accuracy_decimals: 3
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "3.7.0"
-  name: "Momentary Reactive Import"
-  unit_of_measurement: kvar
-  accuracy_decimals: 3
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "4.7.0"
-  name: "Momentary Reactive Export"
-  unit_of_measurement: kvar
-  accuracy_decimals: 3
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "21.7.0"
-  name: "Momentary Active Import Phase 1"
-  unit_of_measurement: kW
-  accuracy_decimals: 3
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "22.7.0"
-  name: "Momentary Active Export Phase 1"
-  unit_of_measurement: kW
-  accuracy_decimals: 3
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "41.7.0"
-  name: "Momentary Active Import Phase 2"
-  unit_of_measurement: kW
-  accuracy_decimals: 3
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "42.7.0"
-  name: "Momentary Active Export Phase 2"
-  unit_of_measurement: kW
-  accuracy_decimals: 3
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "61.7.0"
-  name: "Momentary Active Import Phase 3"
-  unit_of_measurement: kW
-  accuracy_decimals: 3
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "62.7.0"
-  name: "Momentary Active Export Phase 3"
-  unit_of_measurement: kW
-  accuracy_decimals: 3
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "23.7.0"
-  name: "Momentary Reactive Import Phase 1"
-  unit_of_measurement: kvar
-  accuracy_decimals: 3
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "24.7.0"
-  name: "Momentary Reactive Export Phase 1"
-  unit_of_measurement: kvar
-  accuracy_decimals: 3
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "43.7.0"
-  name: "Momentary Reactive Import Phase 2"
-  unit_of_measurement: kvar
-  accuracy_decimals: 3
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "44.7.0"
-  name: "Momentary Reactive Export Phase 2"
-  unit_of_measurement: kvar
-  accuracy_decimals: 3
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "63.7.0"
-  name: "Momentary Reactive Import Phase 3"
-  unit_of_measurement: kvar
-  accuracy_decimals: 3
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "64.7.0"
-  name: "Momentary Reactive Export Phase 3"
-  unit_of_measurement: kvar
-  accuracy_decimals: 3
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "32.7.0"
-  name: "Voltage Phase 1"
-  unit_of_measurement: V
-  accuracy_decimals: 1
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "52.7.0"
-  name: "Voltage Phase 2"
-  unit_of_measurement: V
-  accuracy_decimals: 1
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "72.7.0"
-  name: "Voltage Phase 3"
-  unit_of_measurement: V
-  accuracy_decimals: 1
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "31.7.0"
-  name: "Current Phase 1"
-  unit_of_measurement: A
-  accuracy_decimals: 1
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "51.7.0"
-  name: "Current Phase 2"
-  unit_of_measurement: A
-  accuracy_decimals: 1
-- platform: p1_mini
-  p1_mini_id: p1_mini_1
-  obis_code: "71.7.0"
-  name: "Current Phase 3"
-  unit_of_measurement: A
-  accuracy_decimals: 1
-#- platform: p1_mini
-#  p1_mini_id: p1_mini_2
-#  obis_code: "1.8.0"
-#  name: "Cumulative Active Import, meter 2"
-#  unit_of_measurement: kWh
-#  accuracy_decimals: 3
-#  state_class: "total_increasing"
-#  device_class: "energy"
-#  ...
+  - platform: wifi_signal
+    name: "${device_name} WiFi Signal"
+    update_interval: 10s
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "1.8.0"
+    name: "Cumulative Active Import"
+    icon: "mdi:transmission-tower-export"
+    unit_of_measurement: kWh
+    accuracy_decimals: 3
+    state_class: "total_increasing"
+    device_class: "energy"
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "2.8.0"
+    name: "Cumulative Active Export"
+    icon: "mdi:transmission-tower-import"
+    unit_of_measurement: kWh
+    accuracy_decimals: 3
+    state_class: "total_increasing"
+    device_class: "energy"
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "3.8.0"
+    name: "Cumulative Reactive Import"
+    icon: "mdi:transmission-tower-export"
+    unit_of_measurement: kvarh
+    accuracy_decimals: 3
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "4.8.0"
+    name: "Cumulative Reactive Export"
+    icon: "mdi:transmission-tower-import"
+    unit_of_measurement: kvarh
+    accuracy_decimals: 3
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "1.7.0"
+    name: "Momentary Active Import"
+    icon: "mdi:transmission-tower-export"
+    unit_of_measurement: kW
+    accuracy_decimals: 3
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "2.7.0"
+    name: "Momentary Active Export"
+    icon: "mdi:transmission-tower-import"
+    unit_of_measurement: kW
+    accuracy_decimals: 3
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "3.7.0"
+    name: "Momentary Reactive Import"
+    icon: "mdi:transmission-tower-export"
+    unit_of_measurement: kvar
+    accuracy_decimals: 3
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "4.7.0"
+    name: "Momentary Reactive Export"
+    icon: "mdi:transmission-tower-import"
+    unit_of_measurement: kvar
+    accuracy_decimals: 3
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "21.7.0"
+    name: "Momentary Active Import Phase 1"
+    icon: "mdi:transmission-tower-export"
+    unit_of_measurement: kW
+    accuracy_decimals: 3
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "22.7.0"
+    name: "Momentary Active Export Phase 1"
+    icon: "mdi:transmission-tower-import"
+    unit_of_measurement: kW
+    accuracy_decimals: 3
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "41.7.0"
+    name: "Momentary Active Import Phase 2"
+    icon: "mdi:transmission-tower-export"
+    unit_of_measurement: kW
+    accuracy_decimals: 3
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "42.7.0"
+    name: "Momentary Active Export Phase 2"
+    icon: "mdi:transmission-tower-import"
+    unit_of_measurement: kW
+    accuracy_decimals: 3
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "61.7.0"
+    name: "Momentary Active Import Phase 3"
+    icon: "mdi:transmission-tower-export"
+    unit_of_measurement: kW
+    accuracy_decimals: 3
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "62.7.0"
+    name: "Momentary Active Export Phase 3"
+    icon: "mdi:transmission-tower-import"
+    unit_of_measurement: kW
+    accuracy_decimals: 3
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "23.7.0"
+    name: "Momentary Reactive Import Phase 1"
+    icon: "mdi:transmission-tower-export"
+    unit_of_measurement: kvar
+    accuracy_decimals: 3
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "24.7.0"
+    name: "Momentary Reactive Export Phase 1"
+    icon: "mdi:transmission-tower-import"
+    unit_of_measurement: kvar
+    accuracy_decimals: 3
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "43.7.0"
+    name: "Momentary Reactive Import Phase 2"
+    icon: "mdi:transmission-tower-export"
+    unit_of_measurement: kvar
+    accuracy_decimals: 3
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "44.7.0"
+    name: "Momentary Reactive Export Phase 2"
+    icon: "mdi:transmission-tower-import"
+    unit_of_measurement: kvar
+    accuracy_decimals: 3
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "63.7.0"
+    name: "Momentary Reactive Import Phase 3"
+    icon: "mdi:transmission-tower-export"
+    unit_of_measurement: kvar
+    accuracy_decimals: 3
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "64.7.0"
+    name: "Momentary Reactive Export Phase 3"
+    icon: "mdi:transmission-tower-import"
+    unit_of_measurement: kvar
+    accuracy_decimals: 3
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "32.7.0"
+    name: "Voltage Phase 1"
+    icon: "mdi:lightning-bolt-outline"
+    unit_of_measurement: V
+    accuracy_decimals: 1
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "52.7.0"
+    name: "Voltage Phase 2"
+    icon: "mdi:lightning-bolt-outline"
+    unit_of_measurement: V
+    accuracy_decimals: 1
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "72.7.0"
+    name: "Voltage Phase 3"
+    icon: "mdi:lightning-bolt-outline"
+    unit_of_measurement: V
+    accuracy_decimals: 1
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "31.7.0"
+    name: "Current Phase 1"
+    icon: "mdi:lightning-bolt"
+    unit_of_measurement: A
+    accuracy_decimals: 1
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "51.7.0"
+    name: "Current Phase 2"
+    icon: "mdi:lightning-bolt"
+    unit_of_measurement: A
+    accuracy_decimals: 1
+  - platform: p1_mini
+    p1_mini_id: p1_mini_1
+    obis_code: "71.7.0"
+    name: "Current Phase 3"
+    icon: "mdi:lightning-bolt"
+    unit_of_measurement: A
+    accuracy_decimals: 1
+#  - platform: p1_mini
+#    p1_mini_id: p1_mini_2
+#    obis_code: "1.8.0"
+#    name: "Cumulative Active Import, meter 2"
+#    unit_of_measurement: kWh
+#    accuracy_decimals: 3
+#    state_class: "total_increasing"
+#    device_class: "energy"
+#    ...
