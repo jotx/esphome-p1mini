@@ -271,7 +271,7 @@ namespace esphome {
                         double value{ -1.0 };
                         if (sscanf(m_start_of_data, "1-0:%d.%d.%d(%lf", &major, &minor, &micro, &value) != 4) {
                             bool matched_text_sensor{ false };
-                            for (auto const &text_sensor : m_text_sensors) {
+                            for (IP1MiniTextSensor *text_sensor : m_text_sensors) {
                                 if (strncmp(m_start_of_data, text_sensor->Identifier().c_str(), text_sensor->Identifier().size()) == 0) {
                                     matched_text_sensor = true;
                                     text_sensor->publish_val(m_start_of_data);
