@@ -89,10 +89,14 @@ p1_mini:
       then:
         - switch.turn_on: p1_rts
         - switch.turn_on: status_led
+    on_receiving_update:
+      then:
     on_update_received:
       then:
         - switch.turn_off: p1_rts
         - switch.turn_off: status_led
+    on_update_processed:
+      then:
     on_communication_error:
       then:
         - switch.turn_off: p1_rts

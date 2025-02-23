@@ -4,3 +4,4 @@ electricity_meter
 /*.sh
 .vs
 __pycache__
+*.bak

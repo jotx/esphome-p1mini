@@ -16,14 +16,18 @@ CONF_MINIMUM_PERIOD = "minimum_period"
 CONF_BUFFER_SIZE = "buffer_size"
 CONF_SECONDARY_P1 = "secondary_p1"
 CONF_ON_READY_TO_RECEIVE = "on_ready_to_receive"
+CONF_ON_RECEIVING_UPDATE = "on_receiving_update"
 CONF_ON_UPDATE_RECEIVED = "on_update_received"
+CONF_ON_UPDATE_PROCESSED = "on_update_processed"
 CONF_ON_COMMUNICATION_ERROR = "on_communication_error"
 
 
 
 # Triggers
 ReadyToReceiveTrigger = p1_mini_ns.class_("ReadyToReceiveTrigger", automation.Trigger.template())
+ReceivingUpdateTrigger = p1_mini_ns.class_("ReceivingUpdateTrigger", automation.Trigger.template())
 UpdateReceivedTrigger = p1_mini_ns.class_("UpdateReceivedTrigger", automation.Trigger.template())
+UpdateProcessedTrigger = p1_mini_ns.class_("UpdateProcessedTrigger", automation.Trigger.template())
 CommunicationErrorTrigger = p1_mini_ns.class_("CommunicationErrorTrigger", automation.Trigger.template())
 
 CONFIG_SCHEMA = cv.Schema({
@@ -36,9 +40,19 @@ CONFIG_SCHEMA = cv.Schema({
             cv.GenerateID(CONF_TRIGGER_ID): cv.declare_id(ReadyToReceiveTrigger),
         }
     ),
+    cv.Optional(CONF_ON_RECEIVING_UPDATE): automation.validate_automation(
+        {
+            cv.GenerateID(CONF_TRIGGER_ID): cv.declare_id(ReceivingUpdateTrigger),
+        }
+    ),
     cv.Optional(CONF_ON_UPDATE_RECEIVED): automation.validate_automation(
         {
             cv.GenerateID(CONF_TRIGGER_ID): cv.declare_id(UpdateReceivedTrigger),
+        }
+    ),
+    cv.Optional(CONF_ON_UPDATE_PROCESSED): automation.validate_automation(
+        {
+            cv.GenerateID(CONF_TRIGGER_ID): cv.declare_id(UpdateProcessedTrigger),
         }
     ),
     cv.Optional(CONF_ON_COMMUNICATION_ERROR): automation.validate_automation(
@@ -63,9 +77,19 @@ async def to_code(config):
         cg.add(var.register_ready_to_receive_trigger(trigger))
         await automation.build_automation(trigger, [], conf)
 
+    for conf in config.get(CONF_ON_RECEIVING_UPDATE, []):
+        trigger = cg.new_Pvariable(conf[CONF_TRIGGER_ID])
+        cg.add(var.register_receiving_update_trigger(trigger))
+        await automation.build_automation(trigger, [], conf)
+
     for conf in config.get(CONF_ON_UPDATE_RECEIVED, []):
         trigger = cg.new_Pvariable(conf[CONF_TRIGGER_ID])
         cg.add(var.register_update_received_trigger(trigger))
+        await automation.build_automation(trigger, [], conf)
+
+    for conf in config.get(CONF_ON_UPDATE_PROCESSED, []):
+        trigger = cg.new_Pvariable(conf[CONF_TRIGGER_ID])
+        cg.add(var.register_update_processed_trigger(trigger))
         await automation.build_automation(trigger, [], conf)
 
     for conf in config.get(CONF_ON_COMMUNICATION_ERROR, []):

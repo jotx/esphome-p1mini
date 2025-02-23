@@ -43,9 +43,10 @@ namespace esphome {
         };
 
         class ReadyToReceiveTrigger : public Trigger<> { };
+        class ReceivingUpdateTrigger : public Trigger<> { };
         class UpdateReceivedTrigger : public Trigger<> { };
+        class UpdateProcessedTrigger : public Trigger<> { };
         class CommunicationErrorTrigger : public Trigger<> { };
-
 
         class P1Mini : public uart::UARTDevice, public Component {
         public:
@@ -69,7 +70,9 @@ namespace esphome {
             }
 
             void register_ready_to_receive_trigger(ReadyToReceiveTrigger *trigger) { m_ready_to_receive_triggers.push_back(trigger); }
+            void register_receiving_update_trigger(ReceivingUpdateTrigger *trigger) { m_receiving_update_triggers.push_back(trigger); }
             void register_update_received_trigger(UpdateReceivedTrigger *trigger) { m_update_received_triggers.push_back(trigger); }
+            void register_update_processed_trigger(UpdateProcessedTrigger *trigger) { m_update_processed_triggers.push_back(trigger); }
             void register_communication_error_trigger(CommunicationErrorTrigger *trigger) { m_communication_error_triggers.push_back(trigger); }
 
         private:
@@ -127,8 +130,11 @@ namespace esphome {
 
             std::map<uint32_t, IP1MiniSensor *> m_sensors;
             std::vector<IP1MiniTextSensor *> m_text_sensors; // Keep sorted so longer identifiers are first!
+            
             std::vector<ReadyToReceiveTrigger *> m_ready_to_receive_triggers;
+            std::vector<ReceivingUpdateTrigger *> m_receiving_update_triggers;
             std::vector<UpdateReceivedTrigger *> m_update_received_triggers;
+            std::vector<UpdateProcessedTrigger *> m_update_processed_triggers;
             std::vector<CommunicationErrorTrigger *> m_communication_error_triggers;
 
             constexpr static int discard_log_num_bytes{ 32 };

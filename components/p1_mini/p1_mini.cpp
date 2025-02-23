@@ -429,6 +429,7 @@ namespace esphome {
                 break;
             case states::READING_MESSAGE:
                 m_reading_message_time = current_time;
+                for (auto T : m_receiving_update_triggers) T->trigger();
                 break;
             case states::VERIFYING_CRC:
                 m_verifying_crc_time = current_time;
@@ -440,7 +441,10 @@ namespace esphome {
                 m_start_of_data = m_message_buffer;
                 break;
             case states::WAITING:
-                if (m_state != states::ERROR_RECOVERY) m_display_time_stats = true;
+                if (m_state != states::ERROR_RECOVERY) {
+                    m_display_time_stats = true;
+                    for (auto T : m_update_processed_triggers) T->trigger();
+                }
                 m_waiting_time = current_time;
                 break;
             case states::ERROR_RECOVERY:
