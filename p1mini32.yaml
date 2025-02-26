@@ -1,5 +1,4 @@
 # This configuration is for a Waveshare ESP32-C3-Zero module ( https://www.waveshare.com/wiki/ESP32-C3-Zero )
-# that I am trying out.
 #
 # P1-port           C3
 # -----------------------
@@ -17,8 +16,8 @@
 #
 substitutions:
   device_name: p1mini32
-  device_password: !secret p1mini32_password
-  device_api_key: !secret p1mini32_api_key
+  device_password: !secret p1mini_password
+  device_api_key: !secret p1mini_api_key
 
 esphome:
   name: ${device_name}
