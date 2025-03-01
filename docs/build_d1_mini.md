@@ -1,7 +1,7 @@
 # Build instructions for (Wemos) D1 mini
 
 - 1 [(Wemos) D1 mini](https://www.wemos.cc/en/latest/d1/d1_mini.html) or clone.
-- 1 RJ12 cable (6 wires)
+- 1 RJ12 connector and cable (6 wires)
 - Optionally, hot melt glue and large heat shrink tubing.
 
 Wiring is simple. Five of the pins from the connector (one pin is not used)...

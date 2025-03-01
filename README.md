@@ -41,7 +41,7 @@ However, the ESP8266 is now over 10 years old and [no longer recommended](https:
 ### ... or anything else
 It is also fairly easy to take any board that ESPHome supports and modifying one of the configurations to work with that. It is mostly a question of figuring out what pins to use for what. If you have pre built hardware which does not connect the RTS signal to a GPIO, [read this](docs/NO-RTS.md#rts-not-attached-to-a-gpio). Also, if your pre built hardware inverts the signal in hardware, make sure to remove the inversion in the configration!
 
-Note that ESP32 based boards (other than the ESP32-C3) draw more power, which may cause a problem with the supply from the meter and generally offer no advantage. The P1 port on the meter provides 5V up to 250mA.
+Note that ESP32 based boards other than the ESP32-C3 draw more power, which may cause a problem with the supply from the meter and generally offer no advantage. The P1 port on the meter provides 5V up to 250mA.
 
 ## P1 Passthrough
 [It is possible to attach another P1 reading device in case you need to connect a car charger (or a second p1-mini...) etc.](docs/passthrough.md).
