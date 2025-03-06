@@ -127,7 +127,7 @@ namespace esphome {
                 if (!available()) {
                     constexpr unsigned long max_wait_time_ms{ 60000 };
                     if (max_wait_time_ms < loop_start_time - m_identifying_message_time) {
-                        ESP_LOGW(TAG, "No data received for %d seconds.", max_wait_time_ms / 1000);
+                        ESP_LOGW(TAG, "No data received for %ld seconds.", max_wait_time_ms / 1000);
                         ChangeState(states::ERROR_RECOVERY);
                     }
                     break;
@@ -202,7 +202,7 @@ namespace esphome {
                 {
                     constexpr unsigned long max_message_time_ms{ 10000 };
                     if (max_message_time_ms < loop_start_time - m_reading_message_time && m_reading_message_time < loop_start_time) {
-                        ESP_LOGW(TAG, "Complete message not received within %d seconds. Resetting.", max_message_time_ms / 1000);
+                        ESP_LOGW(TAG, "Complete message not received within %ld seconds. Resetting.", max_message_time_ms / 1000);
                         ChangeState(states::ERROR_RECOVERY);
                     }
                 }
