@@ -1,7 +1,7 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import uart
-from esphome.const import CONF_ID, CONF_TRIGGER_ID
+from esphome.const import CONF_ID, CONF_TRIGGER_ID, CONF_UART_ID
 from esphome import automation
 
 DEPENDENCIES = ['uart']
@@ -63,14 +63,15 @@ CONFIG_SCHEMA = cv.Schema({
 }).extend(cv.COMPONENT_SCHEMA).extend(uart.UART_DEVICE_SCHEMA)
 
 async def to_code(config):
+    uart_component = await cg.get_variable(config[CONF_UART_ID])
     var = cg.new_Pvariable(
         config[CONF_ID],
+        uart_component,
         config[CONF_MINIMUM_PERIOD].total_milliseconds,
         config[CONF_BUFFER_SIZE],
         config[CONF_SECONDARY_P1],
         )
     await cg.register_component(var, config)
-    await uart.register_uart_device(var, config)
 
     for conf in config.get(CONF_ON_READY_TO_RECEIVE, []):
         trigger = cg.new_Pvariable(conf[CONF_TRIGGER_ID])

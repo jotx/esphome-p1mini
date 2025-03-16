@@ -13,11 +13,11 @@ namespace esphome
         class P1MiniTextSensor : public P1MiniTextSensorBase, public text_sensor::TextSensor, public Component
         {
         public:
-            P1MiniTextSensor(std::string identifier)
+            P1MiniTextSensor(const std::string& identifier)
                 : P1MiniTextSensorBase{ identifier }
             {}
 
-            virtual void publish_val(std::string value) override { publish_state(value); }
+            virtual void publish_val(const std::string& value) override { publish_state(value); }
 
         };
 

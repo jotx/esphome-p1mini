@@ -13,7 +13,7 @@ namespace esphome
         class P1MiniSensor : public P1MiniSensorBase, public sensor::Sensor, public Component
         {
         public:
-            P1MiniSensor(std::string obis_code)
+            P1MiniSensor(const std::string& obis_code)
                 : P1MiniSensorBase{ obis_code }
             {}
 

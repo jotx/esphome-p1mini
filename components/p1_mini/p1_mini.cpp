@@ -80,27 +80,28 @@ namespace esphome {
             }
 
             constexpr static const char *TAG = "P1Mini";
-
-
-
         }
 
 
-        P1MiniSensorBase::P1MiniSensorBase(std::string obis_code)
+        P1MiniSensorBase::P1MiniSensorBase(const std::string& obis_code)
             : m_obis{ OBIS(obis_code.c_str()) }
         {
             if (m_obis == OBIS_ERROR) ESP_LOGE(TAG, "Not a valid OBIS code: '%s'", obis_code.c_str());
         }
 
-        P1MiniTextSensorBase::P1MiniTextSensorBase(std::string identifier)
+        P1MiniTextSensorBase::P1MiniTextSensorBase(const std::string& identifier)
             : m_identifier{ identifier }
         {
             //ESP_LOGI(TAG, "New text sensor: '%s'", identifier.c_str());
         }
 
-        P1Mini::P1Mini(uint32_t min_period_ms, int buffer_size, bool secondary_p1)
-            : m_error_recovery_time{ millis() }
+        P1Mini::P1Mini(uart::UARTComponent *parent, uint32_t min_period_ms, int buffer_size, bool secondary_p1)
+            : Component()
+            , uart::UARTDevice(parent)
+            , m_error_recovery_time{ millis() }
             , m_message_buffer_size{ buffer_size }
+            , m_next_loop_timeout_ms{ 0 }
+            , m_polling_interval_ms{ 0 }
             , m_min_period_ms{ min_period_ms }
             , m_secondary_p1{ secondary_p1 }
         {
@@ -118,9 +119,45 @@ namespace esphome {
 
         void P1Mini::setup() {
             //ESP_LOGD("P1Mini", "setup()");
+            if (m_min_period_ms == 0) {
+                // Determine polling interval based on UART buffer size
+                uint32_t rx_buffer_size = static_cast<uint32_t>(parent_->get_rx_buffer_size());
+                uint8_t symbol_size = parent_->get_data_bits() + parent_->get_stop_bits() + (parent_->get_parity() != uart::UART_CONFIG_PARITY_NONE ? 1 : 0) + 1;
+
+                // 800 = 1000 ms * 80%
+                m_polling_interval_ms = (800 * rx_buffer_size * symbol_size) / parent_->get_baud_rate();
+
+                if (m_polling_interval_ms < 20)
+                {
+                    ESP_LOGE("setup", "Polling interval is too low: %d ms (rx_buffer_size %d)",
+                        m_polling_interval_ms, rx_buffer_size);
+                }
+                else if (m_polling_interval_ms < 100)
+                {
+                    ESP_LOGW("setup", "Polling interval is low: %d ms (rx_buffer_size %d)",
+                        m_polling_interval_ms, rx_buffer_size);
+                }
+                else
+                {
+                    ESP_LOGI("setup", "Polling interval calculated as: %d ms (rx_buffer_size %d)",
+                        m_polling_interval_ms, rx_buffer_size);
+                }
+            }
+            else {
+                m_polling_interval_ms = m_min_period_ms;
+            }
         }
 
         void P1Mini::loop() {
+            if (m_next_loop_timeout_ms) {
+                this->set_timeout(m_next_loop_timeout_ms, [this]() { this->RunStateMachine(); });
+            }
+            else {
+                RunStateMachine();
+            }
+        }
+
+        void P1Mini::RunStateMachine() {
             unsigned long const loop_start_time{ millis() };
             switch (m_state) {
             case states::IDENTIFYING_MESSAGE:
@@ -421,6 +458,7 @@ namespace esphome {
             unsigned long const current_time{ millis() };
             switch (new_state) {
             case states::IDENTIFYING_MESSAGE:
+                m_next_loop_timeout_ms = m_polling_interval_ms;
                 m_identifying_message_time = current_time;
                 m_crc_position = m_message_buffer_position = 0;
                 m_num_message_loops = m_num_processing_loops = 0;
@@ -428,19 +466,23 @@ namespace esphome {
                 for (auto T : m_ready_to_receive_triggers) T->trigger();
                 break;
             case states::READING_MESSAGE:
+                m_next_loop_timeout_ms = m_polling_interval_ms;
                 m_reading_message_time = current_time;
                 for (auto T : m_receiving_update_triggers) T->trigger();
                 break;
             case states::VERIFYING_CRC:
+                m_next_loop_timeout_ms = 0;
                 m_verifying_crc_time = current_time;
                 for (auto T : m_update_received_triggers) T->trigger();
                 break;
             case states::PROCESSING_ASCII:
             case states::PROCESSING_BINARY:
+                m_next_loop_timeout_ms = 0;
                 m_processing_time = current_time;
                 m_start_of_data = m_message_buffer;
                 break;
             case states::WAITING:
+                m_next_loop_timeout_ms = m_polling_interval_ms;
                 if (m_state != states::ERROR_RECOVERY) {
                     m_display_time_stats = true;
                     for (auto T : m_update_processed_triggers) T->trigger();
@@ -448,6 +490,7 @@ namespace esphome {
                 m_waiting_time = current_time;
                 break;
             case states::ERROR_RECOVERY:
+                m_next_loop_timeout_ms = m_polling_interval_ms;
                 m_error_recovery_time = current_time;
                 for (auto T : m_communication_error_triggers) T->trigger();
             }

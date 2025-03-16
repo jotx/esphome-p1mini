@@ -5,6 +5,7 @@
 #include "esphome/core/automation.h"
 
 #include <map>
+#include <vector>
 
 namespace esphome {
     namespace p1_mini {
@@ -22,7 +23,7 @@ namespace esphome {
         {
             uint32_t const m_obis;
         public:
-            P1MiniSensorBase(std::string obis_code);
+            P1MiniSensorBase(const std::string& obis_code);
             virtual uint32_t Obis() const { return m_obis; }
         };
 
@@ -30,7 +31,7 @@ namespace esphome {
         {
         public:
             virtual ~IP1MiniTextSensor() = default;
-            virtual void publish_val(std::string) = 0;
+            virtual void publish_val(const std::string&) = 0;
             virtual std::string Identifier() const = 0;
         };
 
@@ -38,7 +39,7 @@ namespace esphome {
         {
             std::string const m_identifier;
         public:
-            P1MiniTextSensorBase(std::string identifier);
+            P1MiniTextSensorBase(const std::string& identifier);
             virtual std::string Identifier() const { return m_identifier; }
         };
 
@@ -48,9 +49,9 @@ namespace esphome {
         class UpdateProcessedTrigger : public Trigger<> { };
         class CommunicationErrorTrigger : public Trigger<> { };
 
-        class P1Mini : public uart::UARTDevice, public Component {
+        class P1Mini : public Component, public uart::UARTDevice {
         public:
-            P1Mini(uint32_t min_period_ms, int buffer_size, bool secondary_p1);
+            P1Mini(uart::UARTComponent *parent, uint32_t min_period_ms, int buffer_size, bool secondary_p1);
 
             void setup() override;
             void loop() override;
@@ -98,6 +99,9 @@ namespace esphome {
             // Keeps track of the start of the data record while processing.
             char *m_start_of_data;
 
+            // Runs the state machine
+            void RunStateMachine();
+
             char GetByte()
             {
                 char const C{ static_cast<char>(read()) };
@@ -124,6 +128,9 @@ namespace esphome {
                 BINARY
             };
             enum data_formats m_data_format { data_formats::UNKNOWN };
+
+            uint32_t m_next_loop_timeout_ms;
+            uint32_t m_polling_interval_ms;
 
             uint32_t const m_min_period_ms;
             bool const m_secondary_p1;
